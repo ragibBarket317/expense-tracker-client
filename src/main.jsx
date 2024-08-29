@@ -6,6 +6,8 @@ import "./index.css";
 import DashboardPage from "./pages/DashboardPage.jsx";
 import ExpensesPage from "./pages/ExpensesPage.jsx";
 import IncomePage from "./pages/IncomePage.jsx";
+import LoginPage from "./pages/LoginPage.jsx";
+import RegisterPage from "./pages/RegisterPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +31,14 @@ const router = createBrowserRouter([
         element: <ExpensesPage />,
       },
     ],
+  },
+  {
+    path: "/register",
+    element: <RegisterPage />,
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
   },
 ]);
 
