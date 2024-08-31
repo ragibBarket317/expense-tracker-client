@@ -1,4 +1,35 @@
+import axios from "axios";
+import Swal from "sweetalert2";
+
 const AddExpense = () => {
+  const handleForm = async (e) => {
+    e.preventDefault();
+
+    try {
+      let form = e.target;
+      const source = form.source.value;
+      const amount = form.amount.value;
+      const date = form.date.value;
+      console.log(source, amount, date);
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_API}/addExpense`,
+        { source, amount, date }
+      );
+      if (response?.status === 201) {
+        Swal.fire({
+          icon: "success",
+          title: "Expense added successfully!!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        form.reset();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <div>
@@ -7,26 +38,16 @@ const AddExpense = () => {
             Add Your Expense
           </h1>
 
-          <form action="#" className="mb-0 mt-6 space-y-4 ">
+          <form onSubmit={handleForm} className="mb-0 mt-6 space-y-4 ">
             <div>
-              <label htmlFor="email">Name</label>
+              <label>Source</label>
 
               <div className="relative">
                 <input
-                  type="email"
+                  type="text"
                   className="w-full rounded-lg border-[1px] border-gray-200 p-4 pe-12 text-sm shadow-sm mt-1"
-                  placeholder="Enter name"
-                />
-              </div>
-            </div>
-            <div>
-              <label htmlFor="email">Description</label>
-
-              <div className="relative">
-                <input
-                  type="email"
-                  className="w-full rounded-lg border-[1px] border-gray-200 p-4 pe-12 text-sm shadow-sm mt-1"
-                  placeholder="Enter description"
+                  placeholder="Enter source"
+                  name="source"
                 />
               </div>
             </div>
@@ -36,9 +57,10 @@ const AddExpense = () => {
 
               <div className="relative">
                 <input
-                  type="password"
+                  type="text"
                   className="w-full rounded-lg border-[1px] border-gray-200 p-4 pe-12 text-sm shadow-sm mt-1"
                   placeholder="Enter amount"
+                  name="amount"
                 />
               </div>
             </div>
@@ -49,6 +71,7 @@ const AddExpense = () => {
                 <input
                   type="date"
                   className="w-full rounded-lg border-[1px] border-gray-200 p-4  text-sm shadow-sm mt-1"
+                  name="date"
                 />
               </div>
             </div>
@@ -57,7 +80,7 @@ const AddExpense = () => {
               type="submit"
               className="block w-full rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white"
             >
-              Add Income
+              Add Expense
             </button>
           </form>
         </div>

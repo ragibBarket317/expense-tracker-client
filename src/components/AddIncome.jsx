@@ -1,4 +1,33 @@
+import axios from "axios";
+import Swal from "sweetalert2";
+
 const AddIncome = () => {
+  const handleForm = async (e) => {
+    e.preventDefault();
+    try {
+      let form = e.target;
+      const source = form.source.value;
+      const amount = form.amount.value;
+      const date = form.date.value;
+      console.log(source, amount, date);
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_API}/addIncome`,
+        { source, amount, date }
+      );
+      if (response?.status === 201) {
+        Swal.fire({
+          icon: "success",
+          title: "Income added successfully!!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        form.reset();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <div>
@@ -7,37 +36,40 @@ const AddIncome = () => {
             Add Your Income
           </h1>
 
-          <form action="#" className="mb-0 mt-6 space-y-4 ">
+          <form onSubmit={handleForm} className="mb-0 mt-6 space-y-4 ">
             <div>
-              <label htmlFor="email">Name</label>
+              <label>Source</label>
 
               <div className="relative">
                 <input
-                  type="email"
+                  type="text"
                   className="w-full rounded-lg border-[1px] border-gray-200 p-4 pe-12 text-sm shadow-sm mt-1"
-                  placeholder="Enter name"
+                  placeholder="Enter source"
+                  name="source"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="password">Amount</label>
+              <label>Amount</label>
 
               <div className="relative">
                 <input
-                  type="password"
+                  type="text"
                   className="w-full rounded-lg border-[1px] border-gray-200 p-4 pe-12 text-sm shadow-sm mt-1"
                   placeholder="Enter amount"
+                  name="amount"
                 />
               </div>
             </div>
             <div>
-              <label htmlFor="password">Date</label>
+              <label>Date</label>
 
               <div className="relative">
                 <input
                   type="date"
                   className="w-full rounded-lg border-[1px] border-gray-200 p-4  text-sm shadow-sm mt-1"
+                  name="date"
                 />
               </div>
             </div>

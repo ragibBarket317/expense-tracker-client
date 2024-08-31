@@ -1,6 +1,18 @@
 import { LogOut, Sun } from "lucide-react";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 const Header = () => {
+  const { setToken } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    setToken(null);
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
   return (
     <div>
       <header className="bg-white border-b">
@@ -49,8 +61,11 @@ const Header = () => {
               <div className="px-[6px] py-[5px] bg-gray-100 rounded-lg">
                 <Sun className="w-6 h-6 text-gray-500" />
               </div>
-              <div className="px-[6px] py-[5px] bg-gray-100 rounded-lg">
-                <LogOut className="w-6 h-6 text-gray-500" />
+              <div className="px-[6px] py-[5px] bg-gray-100 rounded-lg cursor-pointer">
+                <LogOut
+                  onClick={handleLogout}
+                  className="w-6 h-6 text-gray-500"
+                />
               </div>
             </div>
           </div>

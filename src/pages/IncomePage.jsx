@@ -1,7 +1,30 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import AddIncome from "../components/AddIncome";
 import IncomeList from "../components/IncomeList";
 
 const IncomePage = () => {
+  const [incomeList, setIncomeList] = useState([]);
+
+  const reversedIncomeList = incomeList.slice().reverse();
+  console.log(reversedIncomeList);
+  useEffect(() => {
+    const getIncome = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API}/getIncome`
+        );
+        if (response?.status === 200) {
+          setIncomeList(response.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getIncome();
+  }, []);
+
   return (
     <div className="pb-[30px]">
       <div className="flex items-center justify-between mb-5">
@@ -18,7 +41,7 @@ const IncomePage = () => {
       <div className="grid grid-cols-3 gap-5">
         <div className="col-span-2">
           <div className="p-[30px] bg-white rounded-lg shadow-md">
-            <IncomeList />
+            <IncomeList incomes={reversedIncomeList} />
           </div>
         </div>
         <div>

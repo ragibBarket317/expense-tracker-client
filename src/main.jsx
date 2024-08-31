@@ -1,34 +1,55 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import App from "./App.jsx";
+import { AuthProvider } from "./context/AuthContext.jsx";
 import "./index.css";
 import DashboardPage from "./pages/DashboardPage.jsx";
 import ExpensesPage from "./pages/ExpensesPage.jsx";
 import IncomePage from "./pages/IncomePage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
+import PrivateRoute from "./routes/PrivateRoute.jsx";
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <App />,
+    // path: "/",
+    // element: (
+    //   <PrivateRoute>
+    //     <App />
+    //   </PrivateRoute>
+    // ),
     children: [
       {
         path: "/",
-        element: <DashboardPage />,
+        element: (
+          <PrivateRoute>
+            <DashboardPage />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/dashboard",
-        element: <DashboardPage />,
+        element: (
+          <PrivateRoute>
+            <DashboardPage />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/income",
-        element: <IncomePage />,
+        element: (
+          <PrivateRoute>
+            <IncomePage />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/expense",
-        element: <ExpensesPage />,
+        element: (
+          <PrivateRoute>
+            <ExpensesPage />
+          </PrivateRoute>
+        ),
       },
     ],
   },
@@ -44,6 +65,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>
 );

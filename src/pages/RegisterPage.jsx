@@ -1,6 +1,33 @@
-import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import { AuthContext } from "../context/AuthContext";
 
 const RegisterPage = () => {
+  const { register } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleForm = async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    console.log(form);
+    const name = form.username.value;
+    const email = form.email.value;
+    const password = form.password.value;
+
+    const response = await register(name, email, password);
+    if (response?.status === 201) {
+      Swal.fire({
+        position: "center-center",
+        icon: "success",
+        title: "Registration successfull!!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      navigate("/login");
+    }
+    console.log("Response", response);
+  };
   return (
     <div>
       <section className="relative flex flex-wrap lg:h-screen lg:items-center">
@@ -12,7 +39,10 @@ const RegisterPage = () => {
             <p>Hi!! 👋 welcome back to expenseTracker</p>
           </div>
 
-          <form action="#" className="mx-auto mb-0 mt-8 max-w-md space-y-4">
+          <form
+            onSubmit={handleForm}
+            className="mx-auto mb-0 mt-8 max-w-md space-y-4"
+          >
             <div>
               <label htmlFor="email" className="sr-only">
                 Name
@@ -23,9 +53,10 @@ const RegisterPage = () => {
                   type="text"
                   className="w-full rounded-lg border-[1px] border-gray-200 p-4 pe-12 text-sm shadow-sm"
                   placeholder="Enter name"
+                  name="username"
                 />
 
-                <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
+                {/* <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="size-4 text-gray-400"
@@ -40,7 +71,7 @@ const RegisterPage = () => {
                       d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
                     />
                   </svg>
-                </span>
+                </span> */}
               </div>
             </div>
             <div>
@@ -53,6 +84,7 @@ const RegisterPage = () => {
                   type="email"
                   className="w-full rounded-lg border-[1px] border-gray-200 p-4 pe-12 text-sm shadow-sm"
                   placeholder="Enter email"
+                  name="email"
                 />
 
                 <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
@@ -84,6 +116,7 @@ const RegisterPage = () => {
                   type="password"
                   className="w-full rounded-lg border-[1px] border-gray-200 p-4 pe-12 text-sm shadow-sm"
                   placeholder="Enter password"
+                  name="password"
                 />
 
                 <span className="absolute inset-y-0 end-0 grid place-content-center px-4">

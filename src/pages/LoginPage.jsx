@@ -1,5 +1,27 @@
-import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import { AuthContext } from "../context/AuthContext";
 const LoginPage = () => {
+  const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleForm = async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.password.value;
+
+    const res = await login(email, password);
+    if (res?.status === 200) {
+      Swal.fire({
+        text: "Login Successfull!!",
+        icon: "success",
+      });
+
+      navigate("/");
+    }
+  };
   return (
     <div>
       <section className="relative flex flex-wrap lg:h-screen lg:items-center">
@@ -9,7 +31,10 @@ const LoginPage = () => {
             <p>Hi!! 👋 welcome back to expenseTracker</p>
           </div>
 
-          <form action="#" className="mx-auto mb-0 mt-8 max-w-md space-y-4">
+          <form
+            onSubmit={handleForm}
+            className="mx-auto mb-0 mt-8 max-w-md space-y-4"
+          >
             <div>
               <label htmlFor="email" className="sr-only">
                 Email
@@ -20,6 +45,7 @@ const LoginPage = () => {
                   type="email"
                   className="w-full rounded-lg border-[1px] border-gray-200 p-4 pe-12 text-sm shadow-sm"
                   placeholder="Enter email"
+                  name="email"
                 />
 
                 <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
@@ -51,6 +77,7 @@ const LoginPage = () => {
                   type="password"
                   className="w-full rounded-lg border-[1px] border-gray-200 p-4 pe-12 text-sm shadow-sm"
                   placeholder="Enter password"
+                  name="password"
                 />
 
                 <span className="absolute inset-y-0 end-0 grid place-content-center px-4">

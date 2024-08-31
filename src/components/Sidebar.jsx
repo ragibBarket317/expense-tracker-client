@@ -4,8 +4,11 @@ import {
   ShieldPlus,
   Store,
 } from "lucide-react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 const Sidebar = () => {
+  const { user } = useContext(AuthContext);
   return (
     <div>
       <div className="flex h-screen flex-col justify-between border-e bg-white">
@@ -76,11 +79,13 @@ const Sidebar = () => {
             />
 
             <div>
-              <p className="text-xs">
-                <strong className="block font-medium">Eric Frusciante</strong>
+              {user?.token && (
+                <p className="text-xs">
+                  <strong className="block font-medium">{user.name}</strong>
 
-                <span> eric@frusciante.com </span>
-              </p>
+                  <span> {user.email} </span>
+                </p>
+              )}
             </div>
           </a>
         </div>
