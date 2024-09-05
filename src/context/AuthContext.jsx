@@ -5,13 +5,52 @@ const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  console.log(user);
   const [token, setToken] = useState(localStorage.getItem("token"));
 
   useEffect(() => {
     if (token) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+      const fetchUser = async () => {
+        try {
+          const response = await axios.get(
+            `${import.meta.env.VITE_API}/user/profile`
+          );
+          setUser(response.data); // Set user data
+        } catch (error) {
+          console.error("Failed to fetch user data:", error);
+        } finally {
+          setLoading(false); // Stop loading
+        }
+      };
+
+      fetchUser();
+    } else {
+      setLoading(false); // Stop loading even if there's no token
     }
-  }, [token]);
+  }, []);
+
+  // useEffect(() => {
+  //   const storedUser = localStorage.getItem("user");
+  //   if (storedUser) {
+  //     setUser(JSON.parse(storedUser));
+  //   } else {
+  //     const fetchUser = async () => {
+  //       try {
+  //         const response = await axios.get(
+  //           `${import.meta.env.VITE_API}/user/profile`
+  //         );
+  //         setUser(response.data); // Set user data
+  //       } catch (error) {
+  //         console.error("Failed to fetch user data:", error);
+  //       }
+  //     };
+
+  //     fetchUser();
+  //   }
+  // }, []);
 
   const register = async (name, email, password) => {
     return await axios.post(`${import.meta.env.VITE_API}/user/register`, {
@@ -35,6 +74,8 @@ const AuthProvider = ({ children }) => {
       return response;
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -44,7 +85,9 @@ const AuthProvider = ({ children }) => {
   // };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, register, login, setToken }}>
+    <AuthContext.Provider
+      value={{ user, setUser, register, login, setToken, loading }}
+    >
       {children}
     </AuthContext.Provider>
   );

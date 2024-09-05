@@ -1,15 +1,17 @@
 import { useContext } from "react";
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import { AuthContext } from "../context/AuthContext";
-import LoginPage from "../pages/LoginPage";
 
 const PrivateRoute = ({ children }) => {
-  const { user } = useContext(AuthContext);
+  const { user, loading } = useContext(AuthContext);
+  if (loading) {
+    return <h1>Loading...</h1>; // Or use a spinner component
+  }
   return (
     <div>
-      {user?.token ? (
+      {user ? (
         <>
           <div className="flex">
             <div className="w-[15%] sticky top-0 h-screen">
@@ -27,7 +29,7 @@ const PrivateRoute = ({ children }) => {
           </div>
         </>
       ) : (
-        <LoginPage />
+        <Navigate to="/login" />
       )}
     </div>
   );

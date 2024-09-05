@@ -1,12 +1,13 @@
 import { useContext } from "react";
 import { IncomeExpenseContext } from "../context/IncomeExpenseContext";
+import { formatDate } from "../utils/dateformater";
 
 const LatestExpense = () => {
-  const { allExpense } = useContext(IncomeExpenseContext);
-  console.log(allExpense);
+  const { expenseList } = useContext(IncomeExpenseContext);
+  console.log(expenseList);
 
-  //   const latestExpense = allExpense.slice(-5).reverse();
-  //   console.log(latestExpense);
+  const latestExpense = expenseList.slice(-5).reverse();
+  console.log(latestExpense);
   return (
     <div>
       <table className="min-w-full divide-y-2 divide-gray-200 bg-white text-sm">
@@ -24,7 +25,7 @@ const LatestExpense = () => {
           </tr>
         </thead>
 
-        {/* <tbody className="divide-y divide-gray-200">
+        <tbody className="divide-y divide-gray-200">
           {latestExpense &&
             latestExpense.map((expense) => (
               <tr key={expense._id}>
@@ -39,7 +40,7 @@ const LatestExpense = () => {
                 </td>
               </tr>
             ))}
-        </tbody> */}
+        </tbody>
       </table>
     </div>
   );

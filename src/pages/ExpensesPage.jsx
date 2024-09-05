@@ -1,29 +1,7 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
 import AddExpense from "../components/AddExpense";
 import ExpenseList from "../components/ExpenseList";
 
 const ExpensesPage = () => {
-  const [expenseList, setExpenseList] = useState([]);
-
-  const reversedExpenseList = expenseList.slice().reverse();
-
-  useEffect(() => {
-    const getIncome = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API}/getExpense`
-        );
-        if (response?.status === 200) {
-          setExpenseList(response.data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    getIncome();
-  }, [expenseList]);
   return (
     <div className="pb-[30px]">
       <div className="flex items-center justify-between mb-5">
@@ -40,7 +18,7 @@ const ExpensesPage = () => {
       <div className="grid grid-cols-3 gap-5">
         <div className="col-span-2">
           <div className="p-[30px] bg-white rounded-lg shadow-md">
-            <ExpenseList expenses={reversedExpenseList} />
+            <ExpenseList />
           </div>
         </div>
         <div>

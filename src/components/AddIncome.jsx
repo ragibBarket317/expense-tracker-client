@@ -1,7 +1,11 @@
 import axios from "axios";
+import { useContext } from "react";
 import Swal from "sweetalert2";
+import { IncomeExpenseContext } from "../context/IncomeExpenseContext";
 
 const AddIncome = () => {
+  const { incomeList, setIncomeList } = useContext(IncomeExpenseContext);
+
   const handleForm = async (e) => {
     e.preventDefault();
     try {
@@ -16,6 +20,7 @@ const AddIncome = () => {
         { source, amount, date }
       );
       if (response?.status === 201) {
+        setIncomeList([...incomeList, response.data]);
         Swal.fire({
           icon: "success",
           title: "Income added successfully!!",

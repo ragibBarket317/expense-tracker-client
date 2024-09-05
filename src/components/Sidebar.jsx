@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 const Sidebar = () => {
   const { user } = useContext(AuthContext);
+
   return (
     <div>
       <div className="flex h-screen flex-col justify-between border-e bg-white">
@@ -79,7 +80,7 @@ const Sidebar = () => {
             />
 
             <div>
-              {user?.token && (
+              {user && (
                 <p className="text-xs">
                   <strong className="block font-medium">{user.name}</strong>
 

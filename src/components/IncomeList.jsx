@@ -1,7 +1,48 @@
+import axios from "axios";
 import { Pencil, Trash2 } from "lucide-react";
+import { useContext } from "react";
+import Swal from "sweetalert2";
+import { IncomeExpenseContext } from "../context/IncomeExpenseContext";
 import { formatDate } from "../utils/dateformater";
 
-const IncomeList = ({ incomes }) => {
+const IncomeList = () => {
+  const { incomeList, setIncomeList } = useContext(IncomeExpenseContext);
+
+  const handleDelete = (id) => {
+    try {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          axios
+            .delete(`${import.meta.env.VITE_API}/deleteIncome/${id}`)
+            .then((res) => {
+              console.log(res);
+              if (res?.status === 200) {
+                Swal.fire({
+                  title: "Deleted!",
+                  text: "Deleted successfully.",
+                  icon: "success",
+                });
+                const remainingItem = incomeList.filter(
+                  (item) => item._id !== id
+                );
+                setIncomeList(remainingItem);
+              }
+            });
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <div className="overflow-x-auto rounded-lg border border-gray-200">
@@ -24,8 +65,8 @@ const IncomeList = ({ incomes }) => {
           </thead>
 
           <tbody className="divide-y divide-gray-200">
-            {incomes &&
-              incomes.map((income) => (
+            {incomeList &&
+              incomeList.map((income) => (
                 <tr key={income._id}>
                   <td className="whitespace-nowrap px-4 py-[14px] font-medium text-gray-900">
                     {income.source}
@@ -41,7 +82,10 @@ const IncomeList = ({ incomes }) => {
                       <div className="bg-blue-800 text-white px-[8px] py-[5px] rounded-md">
                         <Pencil className="w-4 h-4" />
                       </div>
-                      <div className="bg-red-600 text-white px-[8px] py-[5px] rounded-md">
+                      <div
+                        onClick={() => handleDelete(income._id)}
+                        className="bg-red-600 text-white px-[8px] py-[5px] rounded-md"
+                      >
                         <Trash2 className="w-4 h-4" />
                       </div>
                     </div>

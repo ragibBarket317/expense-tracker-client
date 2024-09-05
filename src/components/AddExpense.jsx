@@ -1,9 +1,23 @@
 import axios from "axios";
+import { useContext } from "react";
 import Swal from "sweetalert2";
+import { IncomeExpenseContext } from "../context/IncomeExpenseContext";
 
 const AddExpense = () => {
+  const { expenseList, setExpenseList, totalExpense, remainingBalance } =
+    useContext(IncomeExpenseContext);
+
   const handleForm = async (e) => {
     e.preventDefault();
+
+    const givenAmount = e.target.amount.value;
+
+    if (parseFloat(givenAmount) > remainingBalance) {
+      return Swal.fire({
+        icon: "error",
+        title: "Insafficent balance. Please add some money.",
+      });
+    }
 
     try {
       let form = e.target;
@@ -17,6 +31,7 @@ const AddExpense = () => {
         { source, amount, date }
       );
       if (response?.status === 201) {
+        setExpenseList([...expenseList, response.data]);
         Swal.fire({
           icon: "success",
           title: "Expense added successfully!!",
